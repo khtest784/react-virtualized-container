@@ -66,9 +66,19 @@ class List extends Component {
                 checked:false,
                 renderkey:"headkey_"+rowitemindex+"_"+index,
                 vindex:rowitemindex,
+                dataIndex:rowitemindex,
                 height:height,
                 top:top,
                 bottom:bottom
+              }
+            })
+        })
+
+        this.listData.eventinfo = this.listData.data.map((rowitem,rowitemindex)=>{
+            return this.listData.rowOption.map((data,index)=>{
+              return {
+                selected:false,
+                checked:false,
               }
             })
         })
@@ -89,6 +99,7 @@ class List extends Component {
             <Grid
                 columninfo={this.listData.columninfo}
                 rowinfo={this.listData.rowinfo}
+                event={this.listData.eventinfo}
                 viewport-height={this.state['layout-height']}
                 viewport-width={this.state['layout-width']}
                 data={this.listData.data}

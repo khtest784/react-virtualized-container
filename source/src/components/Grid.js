@@ -65,7 +65,7 @@ class Grid extends Component{
       target = target.parentNode;
   };
   let dataIndex = target.getAttribute("data-index");
-  let newf = this.state.rowinfo.concat([]);
+  let newf = this.state.event.concat([]);
   if(_this.lastSelectedIndex>dataIndex){
       var from = dataIndex
       var to = _this.lastSelectedIndex
@@ -266,70 +266,18 @@ class Grid extends Component{
           })
       //})
   }
-  __renderChilds(childgroup, data, dataIndex) {
-      return childgroup.map((child, index, array) => {
-          // data-binding properties 처리
-          return replaceBindingProp(child.props.tagName, child.props, data, dataIndex, child)
-      })
-
-      function replaceBindingProp(tagName, properties, data, rowIndex, childElement) {
-          var dataFieldRegExp = new RegExp('{[\\w.]+}', 'g');
-          var matches = [];
-          var newProps = {};
-          if (!properties.id) newProps.id = TopUI.Util.guid() + '_' + rowIndex;
-          else newProps.id = properties.id + '_' + rowIndex;
-          for (var key in properties) {
-              if (key === 'children') {
-                  var value = [];
-                  var newChilds = [];
-                  for (var i = 0; i < properties[key].length; i++) {
-                      value.push(replaceBindingProp(properties[key][i].props.tagName, properties[key][i].props, data, i));
-                      newChilds.push(replaceBindingProp(properties[key][i].props.tagName, properties[key][i].props, data, i));
-                  }
-              } else if (key === 'id') {
-                  continue;
-              } else {
-                  if (typeof properties[key] === 'string')
-                      matches = properties[key].match(dataFieldRegExp);
-                  if (matches && matches.length === 1) {
-                      var fieldName = matches[0].substring(1, matches[0].length - 1);
-                      var value = data[fieldName];
-                  } else {
-                      var value = properties[key];
-                  }
-              }
-              newProps[key] = value;
-          }
-          return Top.Widget.create(tagName, newProps, newChilds, childElement).reactElement;
-      }
-  }
 
   __bindEvent(){
-      var _this=this;
-      /*this.Conbody.addEventListener('click',(event)=>{
-        this.clickhandler()
-        event.stopPropagation();
-      });*/
-
-      /*this.Conbody.addEventListener('scroll',(event)=>{
-        this.scrollhandler(event);
-        if(this.props.sync){
-          this.props.sync();
-        }
-      });//바벨돌아가면 위와 같은표현*/
+    //추후추
   }
 
-  __makeCell(hinfo,vinfo, data, index, cidx, rowinfoIndex){
+   __makeCell(hinfo, vinfo, data, index, dataIndex, cidx, rowinfoIndex){
 
-  let cellinfo=[];
-  //cellinfo[0]={'cellinfotest':"NoInfo"};//test중
-  //this.state.rowinfo[index]['CellInfoLink']=cellinfo;
-
-  let dataIndex = index;//+this.state.from;
-  let ckey = "cell-"+cidx+"-"+dataIndex;
-  let visible = hinfo.visible;
-  let CellWidth = ~~hinfo.width;//this.state.columninfo[cidx].width;
-  let CellHeight = ~~vinfo.height;
+    let cellinfo=[];
+    let ckey = "cell-"+cidx+"-"+dataIndex;
+    let visible = hinfo.visible;
+    let CellWidth = ~~hinfo.width;//this.state.columninfo[cidx].width;
+    let CellHeight = ~~vinfo.height;
 
   //colspan 구현
   if(hinfo.colspan>1){
@@ -359,19 +307,20 @@ class Grid extends Component{
   }
 
 
-  let testTxt = data['Title1']?data['Title1']:'dummy'+cidx
+  let testTxt = data['Title1']?data['Title1']:'cell-'+" index:"+dataIndex+" column:"+cidx
   if(rowinfoIndex){
-    testTxt+="_sub_"+rowinfoIndex;
+        testTxt+=" sub:"+rowinfoIndex;
   }
+
   if(cidx==5){
-    testTxt = this.state.rowinfo[dataIndex][rowinfoIndex].vindex;
-    if(this.props.className.includes("top-thead")){
+    testTxt = dataIndex;
+    if(this.props.className.includes("thead")){
       testTxt = 'INDEX_COLUMN'
     }
   }
 
   if(cidx==0&&rowinfoIndex==0){
-    testTxt = <Gridcheckbox testinfo={this.state.rowinfo[dataIndex][rowinfoIndex]} checked={this.state.rowinfo[dataIndex][rowinfoIndex].checked}></Gridcheckbox>;
+    testTxt = <Gridcheckbox testinfo={this.state.event[dataIndex][rowinfoIndex]} checked={this.state.event[dataIndex][rowinfoIndex].checked}></Gridcheckbox>;//props를 써야하나
   }
 
     return (
@@ -383,12 +332,13 @@ class Grid extends Component{
 
   __renderData(rowinfo, data, index, rowinfoIndex) {
 
-      const dataIndex = index + this.state.from;
-      const listId = `list_${dataIndex}`;
-      const renderkey = rowinfo.renderkey;  //this.state.rowpointer[index].renderkey;
-      const selected = rowinfo.selected;  //this.state.rowpointer[index].selected;
-      const rowHeight = rowinfo.height;  //this.state.rowinfo[dataIndex].layoutHeight;
-      const toppos = rowinfo.top; //this.state.rowinfo[dataIndex].top;
+    const vindex = index + this.state.from;
+    const dataIndex = rowinfo.dataIndex;
+    const listId = `list_${dataIndex}`;
+    const renderkey = rowinfo.renderkey;  //this.state.rowpointer[index].renderkey;
+    const selected = this.state.event[dataIndex][rowinfoIndex].selected;  //this.state.rowpointer[index].selected;
+    const rowHeight = rowinfo.height;  //this.state.rowinfo[dataIndex].layoutHeight;
+    const toppos = rowinfo.top; //this.state.rowinfo[dataIndex].top;
       //const rowHeight =~~parseInt(childs[0].props.layoutHeight)?~~parseInt(childs[0].props.layoutHeight):this.ih;
 
       const classRow="";
@@ -407,7 +357,7 @@ class Grid extends Component{
             {
                 this.state.columninfo[rowinfoIndex].map((column,cidx) =>  {
                   if(cidx>=this.state.from2 - 2 && cidx < this.state.to2){
-                    return this.__makeCell(column,rowinfo, data, dataIndex , cidx, rowinfoIndex)
+                     return this.__makeCell(column,rowinfo, data, vindex ,dataIndex, cidx, rowinfoIndex)
                   }
                 })
             }
@@ -415,9 +365,9 @@ class Grid extends Component{
       )
   }
   __datacut(){
-      this.state.from = Math.max(0,this.state.from - 1);
-      this.state.datapointer = this.state.data.slice(this.state.from, this.state.to + 1);
-      this.state.rowpointer = this.state.rowinfo.slice(this.state.from, this.state.to + 1);
+    this.state.from = Math.max(0,this.state.from - 1);
+    this.state.datapointer = this.props.data.slice(this.state.from, this.state.to);//state에서 props로 바꿈
+    this.state.rowpointer = this.props.rowinfo.slice(this.state.from, this.state.to);
   }
 
   render(){

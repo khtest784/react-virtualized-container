@@ -6,6 +6,7 @@ import "./style/test.css";
 import List from "./list";
 import Table from "./table";
 import Textview from "./components/textview";//component 예시
+import Pagination from "./components/pagination";
 import ReactDom from "react-dom";
 
 
@@ -119,7 +120,7 @@ function cellRenderer({columnIndex, key, dataIndex}) {//dataindex는 rowindex
   );
 }
 
-var testarr = new Array(30).fill(null).map((data,index)=>{
+var testarr = new Array(100).fill(null).map((data,index)=>{
   return {
     "col0" : "text0"+index,
     "col1" : "text1"+index,
@@ -131,7 +132,19 @@ var testarr = new Array(30).fill(null).map((data,index)=>{
     }
 })
 
+
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      page:1,
+    }
+  }
+
+  handlePageClick = (obj) => {
+    this.setState({page:obj.selected+1})
+  }
 
   render() {
     return (
@@ -151,10 +164,18 @@ class App extends Component {
         items={testarr}
         column-option={columnOption}
         head-column-option={headColumnOption}
-        layout-width="600px"
-        layout-height="500px"
+        layout-width="750px"
+        pivot-column-index="2"
+        layout-height="400px"
+        page-length="10"
+        page={this.state.page}
         >
         </Table>
+        <Pagination
+        id="paginationSample"
+        onPageChange={this.handlePageClick}
+        >
+        </Pagination>
       </div>
     );
   }

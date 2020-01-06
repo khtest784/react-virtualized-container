@@ -1,5 +1,17 @@
 import React, { Component } from 'react';
 import Draggable from 'react-draggable';
+import styled from 'styled-components';
+
+const Resizerst = styled.div`
+    width:4px;
+    height:90px;
+    float:left;
+    cursor:col-resize;
+    position:absolute;
+    zIndex:10;
+    background-color:red;
+`;
+
 class Resizerbox extends React.Component {
     constructor(props) {
         super(props);
@@ -13,13 +25,6 @@ class Resizerbox extends React.Component {
       return (this.state.columninfo.map((column,index)=>{
         //transform: "translateX("+(column.left-2)+"px)",// 안되는건 의문 안에서 이미쓰고있는듯
         const style ={
-          width:'4px',
-          height:'90px',
-          float:'left',
-          cursor:'col-resize',
-          position:'absolute',
-          zIndex:10,
-          backgroundColor:'red'
         }
 
         return (
@@ -32,27 +37,25 @@ class Resizerbox extends React.Component {
           onDrag={this.props.dragOver}
           onStop={this.props.dragEnd.bind(this,index)}
           >
-          <div style={style}
-          className="resizer"
-          onMouseEnter={this.toggleHover}
-          onMouseLeave={this.toggleHover}
-          >
-          </div>
+            <Resizerst style={style}
+            className="resizer"
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+            >
+            </Resizerst>
          </Draggable>
        )
       }))
     }
 
     render(){
-      const test = {
+      const style = {
         position:'relative',
         zIndex:1,
-        //left:this.state.left+'px',
-        //height:'0px',
       }
       return(
         <div
-        style={test}
+        style={style}
         className='resizerbox'
         ref={ref => {this.box = ref}}>
         {this.makeresizer()}

@@ -20,12 +20,18 @@
 .listview-container {
   float: left;
 }
-.tbody.flexframe{
-    overflow: auto !important;
+
+.tbody.flexframe {
+    overflow: auto;
 }
-.tbody.fixframe{
-    overflow: hidden;
+.tbody.fixframe {
+    overflow:hidden;
 }
+
+.thead.flexframe,.thead.fixframe{
+  overflow:hidden;
+}
+
 .fixframe .listframe{
   z-index: 5;
 }

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import Row from "./components/Row";
-import Cell from "./components/Cell";
-import Grid from "./components/Grid";
+
+import VirtualBox from "./components/virtualBox";
 import Resizerbox from "./components/resizerbox"
 import ReactDom from "react-dom";
+import styled from 'styled-components';
 
 class Table extends Component {
   constructor(props) {
@@ -197,7 +197,7 @@ class Table extends Component {
     dragOver = ()=>{
       //console.log(event.layerX,event.x,'dragOver');
   }
-    dragEnd = (cidx) =>{
+    dragEnd = (cidx) => {
       let delta = event.x - this.originX;
       cidx = cidx + parseInt(this.state["pivot-column-index"]);
       this.tableData.columnOption.forEach((columnlayer,index)=>{
@@ -214,9 +214,11 @@ class Table extends Component {
       let newcolnum =  this.thead.calcolnum(parseInt(this.thead.state['viewport-width']));
       let newto2 = this.thead.state.to2 + newcolnum + 1;
 
-      this.thead.setState({columninfo:this.tableData.headercolumninfo3,to2:newto2});
-      this.tbody.setState({columninfo:this.tableData.columninfo3,to2:newto2});
-      this.resizerbox.setState({columninfo:this.tableData.headercolumninfo3[this.tableData.headercolumninfo3.length-1]});
+      this.forceUpdate();
+      //정리가 필요함
+      //this.thead.setState({columninfo:this.tableData.headercolumninfo3,to2:newto2});
+      //this.tbody.setState({columninfo:this.tableData.columninfo3,to2:newto2});
+      //this.resizerbox.setState({columninfo:this.tableData.headercolumninfo3[this.tableData.headercolumninfo3.length-1]});
     }
 
     setPage(pagenum){
@@ -263,7 +265,7 @@ class Table extends Component {
                     ref={ref => {this.resizerbox = ref}}>
                     </Resizerbox>
                     </div>
-                    <Grid
+                    <VirtualBox
                         columninfo={this.tableData.headercolumninfo2}
                         rowinfo={this.tableData.headerrowinfo}
                         event={this.tableData.eventinfo}
@@ -275,8 +277,8 @@ class Table extends Component {
                         className='thead listview-container fixframe'
                         item-drag={false}
                     >
-                    </Grid>
-                    <Grid
+                    </VirtualBox>
+                    <VirtualBox
                         columninfo={this.tableData.headercolumninfo3}
                         rowinfo={this.tableData.headerrowinfo}
                         event={this.tableData.eventinfo}
@@ -288,10 +290,10 @@ class Table extends Component {
                         className='thead listview-container flexframe'
                         item-drag={false}
                         ref={ref => {this.thead = ref}}>
-                    </Grid>
+                    </VirtualBox>
                     </div>
                     <div className='body_wrapper'>
-                    <Grid
+                    <VirtualBox
                         columninfo={this.tableData.columninfo2}
                         rowinfo={this.tableData.rowinfo}
                         event={this.tableData.eventinfo}
@@ -303,8 +305,8 @@ class Table extends Component {
                         className='tbody listview-container fixframe'
                         ref={ref => {this.fixtbody = ref}}
                     >
-                    </Grid>
-                    <Grid
+                    </VirtualBox>
+                    <VirtualBox
                         columninfo={this.tableData.columninfo3}
                         rowinfo={this.tableData.rowinfo}
                         event={this.tableData.eventinfo}
@@ -317,7 +319,7 @@ class Table extends Component {
                         ref={ref => {this.tbody = ref}}
                         sync={this.scrollhandler}
                         >
-                    </Grid>
+                    </VirtualBox>
                     </div>
                   </div>
               </div>

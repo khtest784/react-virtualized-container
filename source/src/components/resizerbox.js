@@ -10,7 +10,7 @@ const Resizerst = styled.div`
     position:absolute;
     zIndex:10;
     background-color:red;
-`;
+`;//rouwte에서 작동암함
 
 class Resizerbox extends React.Component {
     constructor(props) {
@@ -22,7 +22,7 @@ class Resizerbox extends React.Component {
     }
     makeresizer(){
       //const Draggable = ReactDraggable;
-      return (this.state.columninfo.map((column,index)=>{
+      return (this.props.columninfo.map((column,index)=>{
         //transform: "translateX("+(column.left-2)+"px)",// 안되는건 의문 안에서 이미쓰고있는듯
         const style ={
         }
@@ -37,12 +37,12 @@ class Resizerbox extends React.Component {
           onDrag={this.props.dragOver}
           onStop={this.props.dragEnd.bind(this,index)}
           >
-            <Resizerst style={style}
+            <div style={style}
             className="resizer"
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}
             >
-            </Resizerst>
+            </div>
          </Draggable>
        )
       }))

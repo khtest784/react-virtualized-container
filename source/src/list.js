@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Row from "./components/Row";
 import Cell from "./components/Cell";
-import Grid from "./components/Grid";
+import VirtualBox from "./components/virtualBox";
 import ReactDom from "react-dom";
 
 class List extends Component {
@@ -96,7 +96,7 @@ class List extends Component {
         let count=0;
         return (
           <div id={this.state.id} style={style} className="wtable-head">
-            <Grid
+            <VirtualBox
                 columninfo={this.listData.columninfo}
                 rowinfo={this.listData.rowinfo}
                 event={this.listData.eventinfo}
@@ -110,7 +110,7 @@ class List extends Component {
                 ref={ref => {this.list = ref}}
                 sync={this.scrollhandler}
             >
-            </Grid>
+            </VirtualBox>
           </div>
         )
   }

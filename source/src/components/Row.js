@@ -8,7 +8,7 @@ const Rowst = styled.div`
   width:100%;
   padding:0px;
   margin:0px;
-`;
+`;//route기능과 사용불가
 
 class Row extends Component{
   constructor(props) {
@@ -20,7 +20,7 @@ class Row extends Component{
   }
   render(){
       const dataIndex = this.props['data-index'];
-      const toppos = this.state['toppos']+"px";
+      const toppos = this.props['toppos']+"px";
 
       const style={
           transform: "translateY("+toppos+")",
@@ -30,11 +30,12 @@ class Row extends Component{
       let classRow = classNames({
           "selected":this.props.selected,
           ["row_"+dataIndex]:true,
+          "row":true,
       })
           return(
-              <Rowst style={style} data-index={this.props['data-index']}   className={classRow}  id={this.state.id} key={this.state.key}  ref={this.myRef}>
+              <div style={style} data-index={this.props['data-index']}   className={classRow}  id={this.state.id} key={this.state.key}  ref={this.myRef}>
                   {this.props.children}
-              </Rowst>
+              </div>
           );
   }
 }

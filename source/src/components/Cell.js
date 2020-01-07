@@ -10,7 +10,8 @@ const Cellst = styled.div`
   padding:0px;
   margin:0px;
   border:1px solid #f3f4f6;
-`;
+`;//route기능과 사용불가
+
 
 class Cell extends Component{
   constructor(props) {
@@ -26,17 +27,18 @@ class Cell extends Component{
       const style={
         transform: "translateX("+leftpos+")",
         visibility:this.state['visible'],
-        height:this.state['height']+'px',
+        height:this.props['height']+'px',
         width:this.props['width'],
       }
       let classCell = classNames({
           "selected":this.props.selected,
           ['column_list']:true,
+          "cell":true,
       })
           return(
-              <Cellst data-index={this.props["data-index"]}  style={style} className={classCell}  ref={this.myRef}>
+              <div data-index={this.props["data-index"]}  style={style} className={classCell}  ref={this.myRef}>
                  {this.props.children}
-              </Cellst>
+              </div>
           );
   }
 }

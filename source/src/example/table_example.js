@@ -4,6 +4,7 @@ import ReactDom from "react-dom";
 import Table from "../table";
 import Textview from "../components/textview";//component 예시
 import Pagination from "../components/pagination";
+import Counter from "../testcounter"
 
 //for Table
 const columnOption =

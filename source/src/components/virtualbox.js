@@ -9,8 +9,10 @@ class VirtualBox extends Component{
       super(props);
       this.state = {
           ...props,
+          from : 0,
+          from2 : 0,
       }
-      this.__SettingVirtual();
+      //this.__SettingVirtual();
       this.scrollChange = _.debounce(this.scrollChange,0)
   }
   componentDidMount() {
@@ -19,8 +21,13 @@ class VirtualBox extends Component{
   }
 
   componentDidUpdate() {
+    //새로 보여지는 DOM들에게 event 바인딩
     this.__bindEvent();
     this.itemdrag();
+    //event binding end
+  }
+  componentWillUpdate(){
+
   }
   calrownum(y){
     let rnum=0;
@@ -40,20 +47,9 @@ class VirtualBox extends Component{
     })
     return cnum + 1;
   }
-  __SettingVirtual(){
-      this.rownum = this.calrownum(parseInt(this.state['viewport-height']));
-      this.colnum =  this.calcolnum(parseInt(this.state['viewport-width']));
-      let startrownum=0;
-      this.state.from = startrownum;
-      this.state.to = startrownum + this.rownum;
 
-      let startcolnum=0;
-      this.state.from2 = startcolnum;
-      this.state.to2 = startcolnum + this.colnum;
-  }
-
-  scrollChange = (target,newdata) =>{
-  this.setState({"datapointer":newdata});
+  scrollChange = () =>{
+  this.setState({"from":this.from,"from2":this.from2});
   }
 
   clickhandler(){
@@ -62,7 +58,7 @@ class VirtualBox extends Component{
   //row탐색
   while (true) {
       if (target.tagName == undefined || target.tagName == null) {return;}
-      if (target.className.includes("column_list") || target.className.includes("top-listview-list") ) {break;}
+      if (target.className.includes("column_list") || target.className.includes("list-list") ) {break;}
       target = target.parentNode;
   };
   let dataIndex = target.getAttribute("data-index");
@@ -96,63 +92,36 @@ class VirtualBox extends Component{
 
   }
 
+  __SettingVirtual(top, left){
+    //row범위
+      if(top){
+        this.from = this.calrownum(top);
+      }else{
+        this.from = 0;
+      }
+      //column범위
+      if(left){
+        this.from2 = this.calcolnum(left);
+      }else{
+        this.from2 = 0;
+      }
+  }
+
   scrollhandler(){
           if(this.props.sync){
             this.props.sync();
           }
-
           let top  = event.srcElement.scrollTop;
           let left = event.srcElement.scrollLeft;
-          this.rownum = this.calrownum(parseInt(this.state['viewport-height']));//임시임
-          this.colnum =  this.calcolnum(parseInt(this.state['viewport-width']));
-
-          let startRowNum = this.calrownum(top); // parseInt(top/this.ih); // 현재위치기준 startRowNum
-          let startColNum = this.calcolnum(left);//parseInt(left/150);
-
-          if(startRowNum==this.state.from&&startColNum==this.state.from2){
+          this.__SettingVirtual(top,left)
+          if(this.from==this.prevfrom && this.from2==this.prevfrom2){
               return;
           }
-          this.state.from = startRowNum;
-          this.state.from2 = startColNum;
+          this.prevfrom = this.from;
+          this.prevfrom2 = this.from2;
+          this.scrollChange();
 
-          if(true){
-              if(startRowNum==0){
-                  var from = 0;
-              }
-              else{
-                  var from = startRowNum - 1;
-              }
 
-              if(startRowNum + this.rownum >= this.state.data.length){
-                  var to = this.state.data.length;
-              }else{
-                  var to = startRowNum + this.rownum;
-              }
-              this.state.from = from;
-              this.state.to = to;
-          }
-
-          if(true){
-              if(startColNum==0){
-                  var from2 = 0;
-              }
-              else{
-                  var from2 = startColNum-1;
-              }
-
-              if(startColNum + this.colnum >= this.state.columninfo[this.state.columninfo.length-1].length/*보류*/){
-                  var to2 = this.state.columninfo[this.state.columninfo.length-1].length; /*보류*/
-              }else{
-                  var to2 = startColNum + this.colnum;
-              }
-              this.state.from2 = from2;
-              this.state.to2 = to2;
-              //console.log(this.state.from2,this.state.to2);
-          }
-          var newdata = this.state.data.slice(from, to);//
-          this.eventpointer = this.state.rowinfo.slice(from, to);
-          this.scrollChange(event.target,newdata);
-          //console.log("scroll_position: ",left,top);
       }
 
   itemdrag(){
@@ -162,7 +131,7 @@ class VirtualBox extends Component{
       var _this=this.Conbody;
       var listUI = this;
       if(true){//속성 on/off시
-          var li_Cells = _this.getElementsByClassName("top-listview-list");
+          var li_Cells = _this.getElementsByClassName("list-list");
           var listbox = this.Conbody;
           //dragstart
           if (this.__uiDragstartListener === undefined) {
@@ -257,7 +226,7 @@ class VirtualBox extends Component{
         }
   }
 
-  __renderLayout(childs) {
+  __renderLayout() {
       //return this.state.datapointer.map((data, dataIndex, array) => {
           return this.state.rowpointer.map((rowgroup, index) => {
             let dataobj = this.state.rowpointer[index];
@@ -340,7 +309,7 @@ class VirtualBox extends Component{
 
   __renderData(rowinfo, data, index, rowinfoIndex) {
 
-    const vindex = index + this.state.from;
+    const vindex = index + this.from;
     const dataIndex = rowinfo.dataIndex;
     const listId = `list_${dataIndex}`;
     const renderkey = rowinfo.renderkey;  //this.state.rowpointer[index].renderkey;
@@ -360,7 +329,7 @@ class VirtualBox extends Component{
           row-height={rowHeight}>
             {
                 this.state.columninfo[rowinfoIndex].map((column,cidx) =>  {
-                  if(cidx>=this.state.from2 - 2 && cidx < this.state.to2){
+                  if(cidx>=this.from2 && cidx < this.to2){
                      return this.__makeCell(column,rowinfo, data, vindex ,dataIndex, cidx, rowinfoIndex)
                   }
                 })
@@ -369,20 +338,29 @@ class VirtualBox extends Component{
       )
   }
   __datacut(){
-    this.state.from = Math.max(0, this.state.from - 1);
-    this.state.datapointer = this.props.data.slice(this.state.from, this.state.to);//state에서 props로 바꿈
-    this.state.rowpointer = this.props.rowinfo.slice(this.state.from, this.state.to);
+    this.rownum = this.calrownum(parseInt(this.props['viewport-height']));
+    this.colnum =  this.calcolnum(parseInt(this.props['viewport-width']));
+    this.from = Math.max(0, this.state.from -2);
+    this.from2 = Math.max(0, this.state.from2 -2);
+    this.to = this.state.from + this.rownum + 2;
+    this.to2 = this.state.from2 + this.colnum + 2;
+
+    //this.from = Math.max(0, this.state.from);
+    //from2는 datacut에 필요하지않음
+
+    this.state.datapointer = this.props.data.slice(this.from, this.to);//state에서 props로 바꿈
+    this.state.rowpointer = this.props.rowinfo.slice(this.from, this.to);
   }
   render(){
       this.state.rowinfo = this.props.rowinfo;
       this.state.columninfo = this.props.columninfo;
-      //this.state.event = this.props.event;
+      this.state.event = this.props.event;
       this.state.data = this.props.data;
       this.state['viewport-height'] = this.props['viewport-height']
       this.state['viewport-width'] = this.props['viewport-width']
-      //임시 어찌처리해야할지 난감
-      this.__datacut();
+      //임시 어찌처리해야할지 난감 props가 바뀔떄 state에 동기화해주는 콜백이 있음 참고
 
+      this.__datacut();
 
       const style = {
         //개발중
@@ -406,7 +384,7 @@ class VirtualBox extends Component{
           return(
               <div style={style} onScroll={(e)=>this.scrollhandler(e)} onClick={(e)=>this.clickhandler(e)} className={className} data-role={dataRole} data-inset={dataInset} ref={ref => {this.Conbody = ref}}>
                 <div className={classvp} style={stylevp} ref={ref => {this.Viewport = ref}}>
-                    {this.__renderLayout(this.props.children)}
+                    {this.__renderLayout()}
                 </div>
               </div>
           );

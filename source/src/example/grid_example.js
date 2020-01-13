@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import styled from 'styled-components';
 
 import Grid from "../grid";
-
+import Counter from "../testcounter"
 function cellmaker({ridx,cidx,ckey}){
     const color = ["red","pink","blue","orange","yellow"]
     const style ={

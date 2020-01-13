@@ -182,12 +182,12 @@ class Table extends Component {
 
     }
     scrollhandler = () => {
-      this.thead.Conbody.children[0].style.right=event.srcElement.scrollLeft+"px";
-      this.fixtbody.Conbody.children[0].style.bottom=event.srcElement.scrollTop+"px";
-      this.resizerbox.box.style.right=event.srcElement.scrollLeft+"px";
-      //console.log("hello",this);
-      this.thead.scrollhandler(event);
-      this.fixtbody.scrollhandler(event);
+      this.thead.Conbody.children[0].style.right = event.srcElement.scrollLeft+"px";
+      this.fixtbody.Conbody.children[0].style.bottom = event.srcElement.scrollTop+"px";
+      this.resizerbox.box.style.right = event.srcElement.scrollLeft+"px";
+
+      this.thead.setState({'from2':this.tbody.from2});
+      this.fixtbody.setState({'from':this.tbody.from});
     }
 
     dragStart = ()=>{

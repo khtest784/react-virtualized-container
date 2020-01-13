@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef } from "react";
 import VirtualBox from "./components/virtualBox";
 
-const Grid = (state) => {
+const Grid = (state) => {//state라 쓰지만 사실은 porps가 된다
   const [id, setId] = useState(state.id);
   const [row, setRow] = useState(state.row);
   const [column, setColumn] = useState(state.column);
@@ -14,7 +14,6 @@ const Grid = (state) => {
   let colspanCount=0;
   let toppos=0;
   let leftpos=0;
-
 
   colspanCount=0;
   let columninfo = [];

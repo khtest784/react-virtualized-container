@@ -10,12 +10,11 @@
 }
 .resizer{
   width:4px;
-  height:90px;
   float:left;
   cursor:col-resize;
   position:absolute;
   zIndex:10;
-  background-color:red;
+  background-color:orange;
 }
 
 .row {
@@ -46,6 +45,9 @@
 }
 
 .listview-container {
+  float: left;
+}
+.tableview-container {
   float: left;
 }
 

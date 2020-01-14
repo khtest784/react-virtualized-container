@@ -109,6 +109,43 @@ var testarr = new Array(100).fill(null).map((data, index) => {
   };
 });
 
+function cellmaker({ ridx, cidx, ckey, }) {
+  const color = ["red", "pink", "blue", "orange", "yellow"];
+  const style = {
+    backgroundColor: color[(ridx + cidx) % 5],
+    height: "100%"
+  }; //보류
+
+  let data = "row:" + ridx + "col:" + cidx;
+
+  return (
+    <div key={ckey} style={style}>
+      {data}
+      <br />
+      {"body"}
+    </div>
+  );
+}
+
+function headCellmaker({ ridx, cidx, ckey, }) {
+  const color = ["red", "pink", "blue", "orange", "yellow"];
+  const style = {
+    backgroundColor: color[(ridx + cidx) % 5],
+    height: "100%"
+  }; //보류
+
+  let data = "row:" + ridx + "col:" + cidx;
+
+  return (
+    <div key={ckey} style={style}>
+      {data}
+      <br />
+      {"head"}
+    </div>
+  );
+}
+
+
 class TableExample extends Component {
   constructor(props) {
     super(props);

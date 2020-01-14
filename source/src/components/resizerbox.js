@@ -9,7 +9,7 @@ const Resizerst = styled.div`
   cursor: col-resize;
   position: absolute;
   zindex: 10;
-  background-color: red;
+  background-color: orange;
 `; //rouwte에서 작동암함
 
 class Resizerbox extends React.Component {
@@ -24,7 +24,9 @@ class Resizerbox extends React.Component {
     //const Draggable = ReactDraggable;
     return this.props.columninfo.map((column, index) => {
       //transform: "translateX("+(column.left-2)+"px)",// 안되는건 의문 안에서 이미쓰고있는듯
-      const style = {};
+      const style = {
+        height:this.props.height+"px",
+      };
 
       return (
         <Draggable

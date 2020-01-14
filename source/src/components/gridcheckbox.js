@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { ThemeContext } from "../table";
+
 class Gridcheckbox extends React.Component {
   constructor(props) {
     super(props);
@@ -7,10 +9,6 @@ class Gridcheckbox extends React.Component {
     };
     this.myRef = React.createRef();
   }
-  checkhandle = () => {
-    console.log(this);
-    this.state.eventinfo.checked = event.target.checked;
-  };
   render() {
     let style = {
       position: "absolute",
@@ -18,14 +16,27 @@ class Gridcheckbox extends React.Component {
       left: "45%"
     };
 
-    let classchk = classNames({});
+    const classchk = classNames({});
+    const { dataIndex, rowinfoIndex } = this.props;
     return (
-      <input
-        style={style}
-        type="checkbox"
-        onChange={this.checkhandle}
-        checked={this.props.checked}
-      ></input>
+      <ThemeContext.Consumer>
+        {({ checkHeeadtoBody, checkBodytoHead, eventinfo , headeventinfo }) => (
+          <input
+            style={style}
+            type="checkbox"
+            onChange={event => {
+              this.props.isHead
+                ? checkHeeadtoBody(event, dataIndex, rowinfoIndex)
+                : checkBodytoHead(event, dataIndex, rowinfoIndex);
+            }}
+            checked={
+              this.props.isHead
+                ? headeventinfo[dataIndex][rowinfoIndex].checked
+                : eventinfo[dataIndex][rowinfoIndex].checked
+            }
+          ></input>
+        )}
+      </ThemeContext.Consumer>
     );
   }
 }

@@ -5,6 +5,10 @@ import Resizerbox from "./components/resizerbox";
 import ReactDom from "react-dom";
 import styled from "styled-components";
 
+export const ThemeContext = React.createContext({
+
+});
+
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -24,13 +28,15 @@ class Table extends Component {
       columnOption: [],
       rowinfo: [],
       columninfo: [],
-      data: [{}]
+      data: [{}],
+      checkHeeadtoBody: this.__checkHeeadtoBody,
+      checkBodytoHead: this.__checkBodytoHead,
     };
     this.__makeEventArray();
   }
   __makeEventArray() {
     this.tableData.eventinfo = this.state.items.map((rowitem, rowitemindex) => {
-      return this.state.items.map((data, index) => {
+      return [...Object.values(this.state["row-option"])].map((data, index) => {
         return {
           selected: false,
           checked: false
@@ -38,22 +44,43 @@ class Table extends Component {
       });
     });
 
-    this.tableData.headeventinfo = { selected: false, checked: false };
+    this.tableData.headeventinfo = [{}].map((rowitem, rowitemindex) => {
+      return [...Object.values(this.state["row-option"])].map((data, index) => {
+        return {
+          selected: false,
+          checked: false
+        };
+      });
+    });
   }
-  __checkHeeadtoBody() {
-    const bool = this.tableData.headeventinfo.checked;
+  __checkHeeadtoBody = (event,dataindex,rowIndex) => {
+    const bool = event.target.checked;
+    this.tableData.headeventinfo.forEach(obj => {
+      obj.forEach(info => {
+        info.checked = bool;
+      });
+    });
     this.tableData.eventinfo.forEach(obj => {
       obj.forEach(info => {
         info.checked = bool;
       });
     });
+    this.forceUpdate();
   }
-  __checkBodytoHead() {
-    this.tableData.eventinfo.every(obj => {
-      obj.forEach(info => {
+  __checkBodytoHead = (event,dataindex,rowIndex) => {
+    const bool = event.target.checked;
+    this.tableData.eventinfo[dataindex][rowIndex].checked = bool;
+    const boolevery = this.tableData.eventinfo.every(obj => {
+      return obj.every(info => {
         return info.checked;
       });
     });
+    this.tableData.headeventinfo.forEach(obj => {
+      obj.forEach(info => {
+        info.checked = boolevery;
+      });
+    });
+    this.forceUpdate();
   }
   __initProperties() {
     this.tableData.data = this.state.items;
@@ -321,6 +348,7 @@ class Table extends Component {
         className="ww-table"
         style={tablestyle}
       >
+      <ThemeContext.Provider value={this.tableData}>
         <div className="table_wrapper">
           <div className="header_wrapper">
             <div style={resizerposition}>
@@ -331,6 +359,7 @@ class Table extends Component {
                     this.tableData.headercolumninfo3.length - 1
                   ]
                 }
+                height={head_height}
                 dragStart={this.dragStart}
                 dragOver={this.dragOver}
                 dragEnd={this.dragEnd}
@@ -340,27 +369,31 @@ class Table extends Component {
               ></Resizerbox>
             </div>
             <VirtualBox
+              isHead={true}
+              cellmaker={this.state["head-cellmaker"]}
               columninfo={this.tableData.headercolumninfo2}
               rowinfo={this.tableData.headerrowinfo}
-              event={this.tableData.eventinfo}
+              event={this.tableData.headeventinfo}
               viewport-height={head_height}
               viewport-width={fix_width}
               data={this.tableData.headerdata}
               data-role="tableview"
               data-inset="true"
-              className="thead listview-container fixframe"
+              className="thead tableview-container fixframe"
               item-drag={false}
             ></VirtualBox>
             <VirtualBox
+              isHead={true}
+              cellmaker={this.state["head-cellmaker"]}
               columninfo={this.tableData.headercolumninfo3}
               rowinfo={this.tableData.headerrowinfo}
-              event={this.tableData.eventinfo}
+              event={this.tableData.headeventinfo}
               viewport-height={head_height}
               viewport-width={flex_width}
               data={this.tableData.headerdata}
               data-role="tableview"
               data-inset="true"
-              className="thead listview-container flexframe"
+              className="thead tableview-container flexframe"
               item-drag={false}
               ref={ref => {
                 this.thead = ref;
@@ -369,6 +402,8 @@ class Table extends Component {
           </div>
           <div className="body_wrapper">
             <VirtualBox
+              isHead={false}
+              cellmaker={this.state.cellmaker}
               columninfo={this.tableData.columninfo2}
               rowinfo={this.tableData.rowinfo}
               event={this.tableData.eventinfo}
@@ -377,12 +412,14 @@ class Table extends Component {
               data={this.state.pagepointer}
               data-role="tableview"
               data-inset="true"
-              className="tbody listview-container fixframe"
+              className="tbody tableview-container fixframe"
               ref={ref => {
                 this.fixtbody = ref;
               }}
             ></VirtualBox>
             <VirtualBox
+              isHead={false}
+              cellmaker={this.state.cellmaker}
               columninfo={this.tableData.columninfo3}
               rowinfo={this.tableData.rowinfo}
               event={this.tableData.eventinfo}
@@ -391,7 +428,7 @@ class Table extends Component {
               data={this.state.pagepointer}
               data-role="tableview"
               data-inset="true"
-              className="tbody listview-container flexframe"
+              className="tbody tableview-container flexframe"
               ref={ref => {
                 this.tbody = ref;
               }}
@@ -400,6 +437,7 @@ class Table extends Component {
             ></VirtualBox>
           </div>
         </div>
+        </ThemeContext.Provider>
       </div>
     );
   }

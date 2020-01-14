@@ -317,11 +317,12 @@ class VirtualBox extends Component {
       }
     }
 
-    if (cidx == 0 && rowinfoIndex == 0) {
+    if (this.props.className.includes("tableview") && cidx == 0 && rowinfoIndex == 0) {
       testTxt = (
         <Gridcheckbox
-          eventinfo={this.state.event[dataIndex][rowinfoIndex]}
-          checked={this.state.event[dataIndex][rowinfoIndex].checked}
+          isHead={this.props.isHead}
+          dataIndex={dataIndex}
+          rowinfoIndex={rowinfoIndex}
         ></Gridcheckbox>
       ); //props를 써야하나
     }

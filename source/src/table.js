@@ -276,14 +276,17 @@ class Table extends Component {
     }
   }
   scrollhandler = () => {
-    this.thead.Conbody.children[0].style.right =
-      event.srcElement.scrollLeft + "px";
-    this.fixtbody.Conbody.children[0].style.bottom =
-      event.srcElement.scrollTop + "px";
+    if(this.thead){
+      this.thead.Conbody.children[0].style.right =
+        event.srcElement.scrollLeft + "px";
+        this.thead.setState({ from2: this.tbody.from2 });
+    }
+    if(this.fixtbody){
+      this.fixtbody.Conbody.children[0].style.bottom =
+        event.srcElement.scrollTop + "px";
+        this.fixtbody.setState({ from: this.tbody.from });
+    }
     this.resizerbox.box.style.right = event.srcElement.scrollLeft + "px";
-
-    this.thead.setState({ from2: this.tbody.from2 });
-    this.fixtbody.setState({ from: this.tbody.from });
   };
 
   dragStart = () => {
@@ -339,10 +342,10 @@ class Table extends Component {
       height: this.state["layout-height"]
     };
     //for git
-    const fix_width =
-      this.tableData.headercolumninfo2[0][
-        this.tableData.headercolumninfo2[0].length - 1
-      ].right + 5;
+    let fix_width = 0;
+    if(~~this.state["pivot-column-index"]){
+      fix_width =this.tableData.headercolumninfo2[0][this.tableData.headercolumninfo2[0].length - 1].right + 3;
+    }
     const flex_width =
       this.state["layout-width"] == "100%"
         ? "100%"
@@ -392,6 +395,7 @@ class Table extends Component {
                   }}
                 ></Resizerbox>
               </div>
+              {~~this.state["pivot-column-index"]>0 &&
               <VirtualBox
                 isHead={true}
                 cellmaker={this.state["head-cellmaker"]}
@@ -406,6 +410,7 @@ class Table extends Component {
                 className="thead tableview-container fixframe"
                 item-drag={false}
               ></VirtualBox>
+              }
               <VirtualBox
                 isHead={true}
                 cellmaker={this.state["head-cellmaker"]}
@@ -425,6 +430,7 @@ class Table extends Component {
               ></VirtualBox>
             </div>
             <div className="body_wrapper">
+              {~~this.state["pivot-column-index"]>0 &&
               <VirtualBox
                 isHead={false}
                 isTable={true}
@@ -442,6 +448,7 @@ class Table extends Component {
                   this.fixtbody = ref;
                 }}
               ></VirtualBox>
+              }
               <VirtualBox
                 isHead={false}
                 isTable={true}

@@ -197,7 +197,7 @@ class TableExample extends Component {
           column-option={columnOption}
           head-column-option={headColumnOption}
           layout-width="750px"
-          pivot-column-index="2"
+          pivot-column-index="0"
           layout-height="400px"
           page-length="10"
           page={this.state.page}

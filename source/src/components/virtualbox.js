@@ -52,55 +52,6 @@ class VirtualBox extends Component {
     this.setState({ from: this.from, from2: this.from2 });
   };
 
-  clickhandler() {
-    if (this.props.clicksync) {
-      this.props.clicksync();
-    }
-
-    let target = event.srcElement;
-    //row탐색
-    while (true) {
-      if (target.tagName == undefined || target.tagName == null) {
-        return;
-      }
-      if (
-        target.className.includes("column_list") ||
-        target.className.includes("list-list")
-      ) {
-        break;
-      }
-      target = target.parentNode;
-    }
-    let dataIndex = target.getAttribute("data-index");
-    let newf = this.state.event.concat([]);
-    if (this.lastSelectedIndex > dataIndex) {
-      var from = dataIndex;
-      var to = this.lastSelectedIndex;
-    } else {
-      var to = dataIndex;
-      var from = this.lastSelectedIndex;
-    }
-    //shift ctrl 모드
-    if (event.shiftKey) {
-      newf.forEach(function(data, index) {
-        if (index >= from && index <= to) {
-          return data.forEach(r => (r.selected = true));
-        } else {
-          return data.forEach(r => (r.selected = false));
-        }
-      });
-    } else if (event.ctrlKey) {
-      //cell단위 구현때 계속
-    } else {
-      newf.forEach(data => data.forEach(r => (r.selected = false)));
-    }
-
-    this.lastSelectedIndex = dataIndex;
-
-    newf[dataIndex].forEach(r => (r.selected = true));
-    this.setState({ event: newf });
-  }
-
   __SettingVirtual(top, left) {
     //row범위
     if (top) {
@@ -258,23 +209,7 @@ class VirtualBox extends Component {
     let CellWidth = ~~hinfo.width; //this.state.columninfo[cidx].width;
     let CellHeight = ~~vinfo.height;
 
-    if (this.state.cellmaker) {
-      let ridx = dataIndex;
-      return (
-        <ContainerCell
-          key={ckey}
-          visible={visible}
-          cellinfo={cellinfo}
-          left={hinfo.left}
-          cidx={cidx}
-          data-index={dataIndex}
-          width={CellWidth}
-          height={CellHeight}
-        >
-          {this.state.cellmaker({ ridx, cidx, ckey })}
-        </ContainerCell>
-      );
-    } //grid처리
+
 
     //colspan 구현
     if (hinfo.colspan > 1) {
@@ -317,6 +252,23 @@ class VirtualBox extends Component {
       }
     }
 
+    if (this.state.cellmaker) {
+      return (
+        <ContainerCell
+          key={ckey}
+          visible={visible}
+          cellinfo={cellinfo}
+          left={hinfo.left}
+          cidx={cidx}
+          data-index={dataIndex}
+          width={CellWidth}
+          height={CellHeight}
+        >
+          {this.state.cellmaker({ dataIndex, cidx, ckey, rowinfoIndex })}
+        </ContainerCell>
+      );
+    } //grid처리
+
     if (this.props.className.includes("tableview") && cidx == 0 && rowinfoIndex == 0) {
       testTxt = (
         <Gridcheckbox
@@ -348,7 +300,6 @@ class VirtualBox extends Component {
     const dataIndex = rowinfo.dataIndex;
     const listId = `list_${dataIndex}`;
     const renderkey = rowinfo.renderkey; //this.state.rowpointer[index].renderkey;
-    const selected = this.state.event[dataIndex][rowinfoIndex].selected; //this.state.rowpointer[index].selected;
     const rowHeight = rowinfo.height; //this.state.rowinfo[dataIndex].layoutHeight;
     const toppos = rowinfo.top; //this.state.rowinfo[dataIndex].top;
     const classRow = "";
@@ -358,9 +309,10 @@ class VirtualBox extends Component {
         key={renderkey}
         id={listId}
         toppos={toppos}
+        isTable={this.props.isTable}
         className={classRow}
-        data-index={dataIndex}
-        selected={selected}
+        dataIndex={dataIndex}
+        rowinfoIndex={rowinfoIndex}
         row-height={rowHeight}
       >
         {this.state.columninfo[rowinfoIndex].map((column, cidx) => {
@@ -396,7 +348,6 @@ class VirtualBox extends Component {
   render() {
     this.state.rowinfo = this.props.rowinfo;
     this.state.columninfo = this.props.columninfo;
-    this.state.event = this.props.event;
     this.state.data = this.props.data;
     this.state["viewport-height"] = this.props["viewport-height"];
     this.state["viewport-width"] = this.props["viewport-width"];
@@ -430,7 +381,6 @@ class VirtualBox extends Component {
       <div
         style={style}
         onScroll={e => this.scrollhandler(e)}
-        onClick={e => this.clickhandler(e)}
         className={className}
         data-role={dataRole}
         data-inset={dataInset}

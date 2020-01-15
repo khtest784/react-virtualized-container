@@ -5,9 +5,7 @@ import Resizerbox from "./components/resizerbox";
 import ReactDom from "react-dom";
 import styled from "styled-components";
 
-export const ThemeContext = React.createContext({
-
-});
+export const containerinfo = React.createContext({});
 
 class Table extends Component {
   constructor(props) {
@@ -31,6 +29,7 @@ class Table extends Component {
       data: [{}],
       checkHeeadtoBody: this.__checkHeeadtoBody,
       checkBodytoHead: this.__checkBodytoHead,
+      selectBody: this.__selectBody
     };
     this.__makeEventArray();
   }
@@ -53,7 +52,7 @@ class Table extends Component {
       });
     });
   }
-  __checkHeeadtoBody = (event,dataindex,rowIndex) => {
+  __checkHeeadtoBody = (event, dataIndex, rowIndex) => {
     const bool = event.target.checked;
     this.tableData.headeventinfo.forEach(obj => {
       obj.forEach(info => {
@@ -66,10 +65,10 @@ class Table extends Component {
       });
     });
     this.forceUpdate();
-  }
-  __checkBodytoHead = (event,dataindex,rowIndex) => {
+  };
+  __checkBodytoHead = (event, dataIndex, rowIndex) => {
     const bool = event.target.checked;
-    this.tableData.eventinfo[dataindex][rowIndex].checked = bool;
+    this.tableData.eventinfo[dataIndex][rowIndex].checked = bool;
     const boolevery = this.tableData.eventinfo.every(obj => {
       return obj.every(info => {
         return info.checked;
@@ -81,7 +80,35 @@ class Table extends Component {
       });
     });
     this.forceUpdate();
-  }
+  };
+  __selectBody = (event, dataIndex, rowIndex) => {
+    //shift ctrl 모드
+    if (event.shiftKey) {
+      if (this.lastSelectedIndex > dataIndex) {
+        var from = dataIndex;
+        var to = this.lastSelectedIndex;
+      } else {
+        var to = dataIndex;
+        var from = this.lastSelectedIndex;
+      }
+      this.tableData.eventinfo.forEach(function(data, index) {
+        if (index >= from && index <= to) {
+          return data.forEach(r => (r.selected = true));
+        } else {
+          return data.forEach(r => (r.selected = false));
+        }
+      });
+    } else if (event.ctrlKey) {
+      //cell단위 구현때 계속
+    } else {
+      this.tableData.eventinfo.forEach(obj => {
+        obj.forEach(r => (r.selected = false)); //초기화
+      });
+    }
+    this.lastSelectedIndex = dataIndex;
+    this.tableData.eventinfo[dataIndex].forEach(r => (r.selected = true)); //selected 적용
+    this.forceUpdate();
+  };
   __initProperties() {
     this.tableData.data = this.state.items;
     this.tableData.headColumnOption = [
@@ -248,9 +275,6 @@ class Table extends Component {
       }
     }
   }
-  clickhandler = () => {
-    this.fixtbody.forceUpdate();
-  };
   scrollhandler = () => {
     this.thead.Conbody.children[0].style.right =
       event.srcElement.scrollLeft + "px";
@@ -348,96 +372,97 @@ class Table extends Component {
         className="ww-table"
         style={tablestyle}
       >
-      <ThemeContext.Provider value={this.tableData}>
-        <div className="table_wrapper">
-          <div className="header_wrapper">
-            <div style={resizerposition}>
-              <Resizerbox
-                left={fix_width}
-                columninfo={
-                  this.tableData.headercolumninfo3[
-                    this.tableData.headercolumninfo3.length - 1
-                  ]
-                }
-                height={head_height}
-                dragStart={this.dragStart}
-                dragOver={this.dragOver}
-                dragEnd={this.dragEnd}
+        <containerinfo.Provider value={this.tableData}>
+          <div className="table_wrapper">
+            <div className="header_wrapper">
+              <div style={resizerposition}>
+                <Resizerbox
+                  left={fix_width}
+                  columninfo={
+                    this.tableData.headercolumninfo3[
+                      this.tableData.headercolumninfo3.length - 1
+                    ]
+                  }
+                  height={head_height}
+                  dragStart={this.dragStart}
+                  dragOver={this.dragOver}
+                  dragEnd={this.dragEnd}
+                  ref={ref => {
+                    this.resizerbox = ref;
+                  }}
+                ></Resizerbox>
+              </div>
+              <VirtualBox
+                isHead={true}
+                cellmaker={this.state["head-cellmaker"]}
+                columninfo={this.tableData.headercolumninfo2}
+                rowinfo={this.tableData.headerrowinfo}
+                event={this.tableData.headeventinfo}
+                viewport-height={head_height}
+                viewport-width={fix_width}
+                data={this.tableData.headerdata}
+                data-role="tableview"
+                data-inset="true"
+                className="thead tableview-container fixframe"
+                item-drag={false}
+              ></VirtualBox>
+              <VirtualBox
+                isHead={true}
+                cellmaker={this.state["head-cellmaker"]}
+                columninfo={this.tableData.headercolumninfo3}
+                rowinfo={this.tableData.headerrowinfo}
+                event={this.tableData.headeventinfo}
+                viewport-height={head_height}
+                viewport-width={flex_width}
+                data={this.tableData.headerdata}
+                data-role="tableview"
+                data-inset="true"
+                className="thead tableview-container flexframe"
+                item-drag={false}
                 ref={ref => {
-                  this.resizerbox = ref;
+                  this.thead = ref;
                 }}
-              ></Resizerbox>
+              ></VirtualBox>
             </div>
-            <VirtualBox
-              isHead={true}
-              cellmaker={this.state["head-cellmaker"]}
-              columninfo={this.tableData.headercolumninfo2}
-              rowinfo={this.tableData.headerrowinfo}
-              event={this.tableData.headeventinfo}
-              viewport-height={head_height}
-              viewport-width={fix_width}
-              data={this.tableData.headerdata}
-              data-role="tableview"
-              data-inset="true"
-              className="thead tableview-container fixframe"
-              item-drag={false}
-            ></VirtualBox>
-            <VirtualBox
-              isHead={true}
-              cellmaker={this.state["head-cellmaker"]}
-              columninfo={this.tableData.headercolumninfo3}
-              rowinfo={this.tableData.headerrowinfo}
-              event={this.tableData.headeventinfo}
-              viewport-height={head_height}
-              viewport-width={flex_width}
-              data={this.tableData.headerdata}
-              data-role="tableview"
-              data-inset="true"
-              className="thead tableview-container flexframe"
-              item-drag={false}
-              ref={ref => {
-                this.thead = ref;
-              }}
-            ></VirtualBox>
+            <div className="body_wrapper">
+              <VirtualBox
+                isHead={false}
+                isTable={true}
+                cellmaker={this.state.cellmaker}
+                columninfo={this.tableData.columninfo2}
+                rowinfo={this.tableData.rowinfo}
+                event={this.tableData.eventinfo}
+                viewport-height={body_height}
+                viewport-width={fix_width}
+                data={this.state.pagepointer}
+                data-role="tableview"
+                data-inset="true"
+                className="tbody tableview-container fixframe"
+                ref={ref => {
+                  this.fixtbody = ref;
+                }}
+              ></VirtualBox>
+              <VirtualBox
+                isHead={false}
+                isTable={true}
+                cellmaker={this.state.cellmaker}
+                columninfo={this.tableData.columninfo3}
+                rowinfo={this.tableData.rowinfo}
+                event={this.tableData.eventinfo}
+                viewport-height={body_height}
+                viewport-width={flex_width}
+                data={this.state.pagepointer}
+                data-role="tableview"
+                data-inset="true"
+                className="tbody tableview-container flexframe"
+                ref={ref => {
+                  this.tbody = ref;
+                }}
+                scrollsync={this.scrollhandler}
+              ></VirtualBox>
+            </div>
           </div>
-          <div className="body_wrapper">
-            <VirtualBox
-              isHead={false}
-              cellmaker={this.state.cellmaker}
-              columninfo={this.tableData.columninfo2}
-              rowinfo={this.tableData.rowinfo}
-              event={this.tableData.eventinfo}
-              viewport-height={body_height}
-              viewport-width={fix_width}
-              data={this.state.pagepointer}
-              data-role="tableview"
-              data-inset="true"
-              className="tbody tableview-container fixframe"
-              ref={ref => {
-                this.fixtbody = ref;
-              }}
-            ></VirtualBox>
-            <VirtualBox
-              isHead={false}
-              cellmaker={this.state.cellmaker}
-              columninfo={this.tableData.columninfo3}
-              rowinfo={this.tableData.rowinfo}
-              event={this.tableData.eventinfo}
-              viewport-height={body_height}
-              viewport-width={flex_width}
-              data={this.state.pagepointer}
-              data-role="tableview"
-              data-inset="true"
-              className="tbody tableview-container flexframe"
-              ref={ref => {
-                this.tbody = ref;
-              }}
-              scrollsync={this.scrollhandler}
-              clicksync={this.clickhandler}
-            ></VirtualBox>
-          </div>
-        </div>
-        </ThemeContext.Provider>
+        </containerinfo.Provider>
       </div>
     );
   }

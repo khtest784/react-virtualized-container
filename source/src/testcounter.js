@@ -5,9 +5,6 @@ import { increment, decrement, saveinfo } from "./store/reducer/firstreducer";
 class Counter extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      ...props
-    };
     this.props.saveinfo(props);
   }
 

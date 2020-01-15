@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Cell from "./Cell";
+import { containerinfo } from "../table";
 import styled from "styled-components";
 
 const Rowst = styled.div`
@@ -19,30 +20,37 @@ class Row extends Component {
     this.myRef = React.createRef();
   }
   render() {
-    const dataIndex = this.props["data-index"];
+    const { dataIndex, rowinfoIndex } = this.props;
     const toppos = this.props["toppos"] + "px";
-
     const style = {
       transform: "translateY(" + toppos + ")"
       //height:this.props['row-height']+"px",
     };
-
-    let classRow = classNames({
-      selected: this.props.selected,
-      ["row_" + dataIndex]: true,
-      row: true
-    });
+    let classRow = classNames({});
     return (
-      <div
-        style={style}
-        data-index={this.props["data-index"]}
-        className={classRow}
-        id={this.state.id}
-        key={this.state.key}
-        ref={this.myRef}
-      >
-        {this.props.children}
-      </div>
+      <containerinfo.Consumer>
+        {({ selectBody, eventinfo }) => (
+          <div
+            onClick={event => {
+              this.props.isTable
+                ? selectBody(event, dataIndex, rowinfoIndex)
+                : null;
+            }}
+            style={style}
+            data-index={this.props["data-index"]}
+            className={classNames({
+              selected: eventinfo[dataIndex][rowinfoIndex].selected,
+              ["row_" + dataIndex]: true,
+              row: true
+            })}
+            id={this.state.id}
+            key={this.state.key}
+            ref={this.myRef}
+          >
+            {this.props.children}
+          </div>
+        )}
+      </containerinfo.Consumer>
     );
   }
 }

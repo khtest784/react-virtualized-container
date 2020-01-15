@@ -5,13 +5,14 @@ import Table from "../table";
 import Textview from "../components/textview"; //component 예시
 import Pagination from "../components/pagination";
 import Counter from "../testcounter";
+import Gridcheckbox from "../components/gridcheckbox"
 
 //for Table
 const columnOption = {
   0: {
     0: { id: "column00", colspan: 2, rowspan: 2 },
     1: { id: "column01", width: "50px" },
-    2: { id: "column02", rowspan: 2 },
+    2: { id: "column02", rowspan: 3 },
     3: { id: "column03" },
     4: { id: "column04" },
     5: { id: "column05", rowspan: 3, width: "50px" },
@@ -56,7 +57,7 @@ const headColumnOption = {
   0: {
     0: { id: "head00", colspan: 2, rowspan: 2 },
     1: { id: "head01", width: "50px" },
-    2: { id: "head02", rowspan: 2 },
+    2: { id: "head02", rowspan: 3 },
     3: { id: "head03" },
     4: { id: "head04" },
     5: { id: "head05", rowspan: 3, width: "50px" },
@@ -109,38 +110,62 @@ var testarr = new Array(100).fill(null).map((data, index) => {
   };
 });
 
-function cellmaker({ ridx, cidx, ckey, }) {
-  const color = ["red", "pink", "blue", "orange", "yellow"];
+function cellmaker({ dataIndex, cidx, ckey, rowinfoIndex }) {
+  const color = ["blue", "pink", "red", "orange", "yellow","sky"];
   const style = {
-    backgroundColor: color[(ridx + cidx) % 5],
+    //backgroundColor: color[dataIndex%6],
     height: "100%"
   }; //보류
 
-  let data = "row:" + ridx + "col:" + cidx;
+  let data = "row:" + dataIndex + "col:" + cidx;
+
+  if(cidx==0){
+    return(
+      <div key={ckey} style={style}>
+      <Gridcheckbox
+        isHead={false}
+        dataIndex={dataIndex}
+        rowinfoIndex={rowinfoIndex}
+      ></Gridcheckbox>
+      </div>
+    )
+  }
 
   return (
     <div key={ckey} style={style}>
       {data}
       <br />
-      {"body"}
+      {"BodyContent"}
     </div>
   );
 }
 
-function headCellmaker({ ridx, cidx, ckey, }) {
-  const color = ["red", "pink", "blue", "orange", "yellow"];
+function headCellmaker({ dataIndex, cidx, ckey, rowinfoIndex }) {
+  const color = ["grey","red", "pink", "blue", "orange", "yellow","sky"];
   const style = {
-    backgroundColor: color[(ridx + cidx) % 5],
+    backgroundColor: color[dataIndex%6],
     height: "100%"
   }; //보류
 
-  let data = "row:" + ridx + "col:" + cidx;
+  let data = "row:" + dataIndex + "col:" + cidx;
+
+  if(cidx==0){
+    return(
+      <div key={ckey} style={style}>
+      <Gridcheckbox
+        isHead={true}
+        dataIndex={dataIndex}
+        rowinfoIndex={rowinfoIndex}
+      ></Gridcheckbox>
+      </div>
+    )
+  }
 
   return (
     <div key={ckey} style={style}>
       {data}
       <br />
-      {"head"}
+      {"headContent"}
     </div>
   );
 }
@@ -164,6 +189,8 @@ class TableExample extends Component {
         <h1>Complex Structure TABLE ( essential bind)</h1>
         <Table
           id="tableSample"
+          cellmaker={cellmaker}
+          head-cellmaker={headCellmaker}
           head-row-option={headRowOption}
           row-option={rowOption}
           items={testarr}

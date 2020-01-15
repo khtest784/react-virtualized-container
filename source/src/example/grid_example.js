@@ -3,14 +3,14 @@ import styled from "styled-components";
 
 import Grid from "../grid";
 import Counter from "../testcounter";
-function cellmaker({ ridx, cidx, ckey }) {
+function cellmaker({ dataIndex, cidx, ckey, rowinfoIndex }) {
   const color = ["red", "pink", "blue", "orange", "yellow"];
   const style = {
-    backgroundColor: color[(ridx + cidx) % 5],
+    backgroundColor: color[(dataIndex + cidx) % 5],
     height: "100%"
   }; //보류
 
-  let data = "row:" + ridx + "col:" + cidx;
+  let data = "row:" + dataIndex + "col:" + cidx;
 
   return (
     <div key={ckey} style={style}>

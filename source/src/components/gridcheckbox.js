@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ThemeContext } from "../table";
+import { containerinfo } from "../table";
 
 class Gridcheckbox extends React.Component {
   constructor(props) {
@@ -19,12 +19,12 @@ class Gridcheckbox extends React.Component {
     const classchk = classNames({});
     const { dataIndex, rowinfoIndex } = this.props;
     return (
-      <ThemeContext.Consumer>
+      <containerinfo.Consumer>
         {({ checkHeeadtoBody, checkBodytoHead, eventinfo , headeventinfo }) => (
           <input
             style={style}
             type="checkbox"
-            onChange={event => {
+            onChange={(event) => {
               this.props.isHead
                 ? checkHeeadtoBody(event, dataIndex, rowinfoIndex)
                 : checkBodytoHead(event, dataIndex, rowinfoIndex);
@@ -36,7 +36,7 @@ class Gridcheckbox extends React.Component {
             }
           ></input>
         )}
-      </ThemeContext.Consumer>
+      </containerinfo.Consumer>
     );
   }
 }

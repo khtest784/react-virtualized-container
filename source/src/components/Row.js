@@ -39,7 +39,7 @@ class Row extends Component {
             style={style}
             data-index={this.props["data-index"]}
             className={classNames({
-              selected: eventinfo[dataIndex][rowinfoIndex].selected,
+              selected: this.props.isTable? eventinfo[dataIndex][rowinfoIndex].selected:false,
               ["row_" + dataIndex]: true,
               row: true
             })}

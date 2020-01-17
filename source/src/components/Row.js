@@ -44,7 +44,6 @@ class Row extends Component {
               row: true
             })}
             id={this.state.id}
-            key={this.state.key}
             ref={this.myRef}
           >
             {this.props.children}

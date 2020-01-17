@@ -21,11 +21,11 @@ class Cell extends Component {
     this.myRef = React.createRef();
   }
   render() {
-    let leftpos = this.props["left"] + "px"; //this.props["cidx"]*150+"px";
+    let leftpos = this.props["left"] + "px";
 
     const style = {
       transform: "translateX(" + leftpos + ")",
-      visibility: this.state["visible"],
+      visibility: this.props["visible"],
       height: this.props["height"] + "px",
       width: this.props["width"]
     };

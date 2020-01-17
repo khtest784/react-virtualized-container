@@ -13,6 +13,7 @@ class Table extends Component {
     this.state = {
       pageStartNum: 0,
       page: 1,
+      "pivot-column-index":0,
       ...props
     };
     this.tableData = {
@@ -128,8 +129,8 @@ class Table extends Component {
     ];
     let pivot = this.state["pivot-column-index"]; //영역분할
     //rowinfo생성
-    const plen = parseInt(this.props["page-length"]);
-    const pageStartNum = (this.props.page - 1) * plen;
+    const plen = ~~parseInt(this.state["page-length"]);
+    const pageStartNum = (this.state.page - 1) * plen;
     if (plen > 0) {
       var pageEndNum = pageStartNum + plen;
     } else {
@@ -150,9 +151,7 @@ class Table extends Component {
           let bottom = top + height;
           toppos += height;
           return {
-            selected: false,
-            checked: false,
-            renderkey: "headkey_" + headrowitemindex + "_" + index,
+            //renderkey: "row_" + headrowitemindex + "_" + index,
             vindex: headrowitemindex,
             dataIndex: headrowitemindex,
             height: height,
@@ -218,9 +217,7 @@ class Table extends Component {
           let bottom = top + height;
           toppos += height;
           return {
-            selected: false,
-            checked: false,
-            renderkey: "headkey_" + rowitemindex + "_" + index,
+            //renderkey: "row_" + rowitemindex + "_" + index,
             vindex: rowitemindex,
             dataIndex: rowitemindex + pageStartNum,
             height: height,

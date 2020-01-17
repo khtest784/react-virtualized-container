@@ -37,13 +37,11 @@ class List extends Component {
         return rowitem.map((columnitem, index) => {
           let left = leftpos;
           let width = 0;
-
           if (~~parseInt(columnitem.width)) {
             width = parseInt(columnitem.width);
           } else {
             width = 120; //default값
           }
-
           let right = left + width;
           leftpos += width;
           return {
@@ -67,9 +65,7 @@ class List extends Component {
         let bottom = top + height;
         toppos += height;
         return {
-          selected: false,
-          checked: false,
-          renderkey: "headkey_" + rowitemindex + "_" + index,
+          //renderkey: "row" + rowitemindex + "_" + index,
           vindex: rowitemindex,
           dataIndex: rowitemindex,
           height: height,
@@ -94,7 +90,7 @@ class List extends Component {
   render() {
     this.__initProperties();
     const style = {
-      border: "1px solid blue",
+      border: "1px solid grey",
       display: "inline-block",
       overflow: "hidden"
     };
@@ -103,6 +99,8 @@ class List extends Component {
     return (
       <div id={this.state.id} style={style} className="wtable-head">
         <VirtualBox
+          cellmaker={this.state.cellmaker}
+          isTable={false}
           columninfo={this.listData.columninfo}
           rowinfo={this.listData.rowinfo}
           event={this.listData.eventinfo}

@@ -175,12 +175,12 @@ class TableExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: 1
+
     };
   }
 
   handlePageClick = obj => {
-    this.setState({ page: obj.selected + 1 });
+    this.table01.setState({ page: obj.selected + 1 });
   };
 
   render() {
@@ -197,10 +197,27 @@ class TableExample extends Component {
           column-option={columnOption}
           head-column-option={headColumnOption}
           layout-width="750px"
-          pivot-column-index="0"
+          pivot-column-index="3"
           layout-height="400px"
           page-length="10"
-          page={this.state.page}
+          ref={ref => {
+            this.table01 = ref;
+          }}
+        ></Table>
+        <Table
+          id="tableSample2"
+          cellmaker={cellmaker}
+          head-cellmaker={headCellmaker}
+          head-row-option={headRowOption}
+          row-option={rowOption}
+          items={testarr}
+          column-option={columnOption}
+          head-column-option={headColumnOption}
+          layout-width="800px"
+          layout-height="300px"
+          ref={ref => {
+            this.table02 = ref;
+          }}
         ></Table>
         <Pagination
           id="paginationSample"

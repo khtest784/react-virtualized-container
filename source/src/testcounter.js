@@ -17,7 +17,7 @@ class Counter extends Component {
 
   render() {
     const { id } = this.props;
-    const { number } = this.props.DataTableData[id];
+    const { number } = this.props.CompInfo[id];
     const style = {
       float: "left",
       marginRight: "100px"
@@ -35,7 +35,7 @@ class Counter extends Component {
 
 const mapStateToProps = (todo, ownProps) => ({
   //2
-  DataTableData: todo.firstreducer.DataTableData,
+  CompInfo: todo.firstreducer.CompInfo,
   ownProps
 });
 

@@ -204,7 +204,7 @@ class VirtualBox extends Component {
 
   __makeCell(hinfo, vinfo, data, index, dataIndex, cidx, rowinfoIndex) {
     let cellinfo = [];
-    let ckey = "cell-" + cidx + "-" + dataIndex;
+    let ckey = "cell-" + cidx;// + "-" + dataIndex;
     let visible = hinfo.visible;
     let CellWidth = ~~hinfo.width; //this.state.columninfo[cidx].width;
     let CellHeight = ~~vinfo.height;
@@ -299,9 +299,9 @@ class VirtualBox extends Component {
     const vindex = index + this.from;
     const dataIndex = rowinfo.dataIndex;
     const listId = `list_${dataIndex}`;
-    const renderkey = rowinfo.renderkey; //this.state.rowpointer[index].renderkey;
-    const rowHeight = rowinfo.height; //this.state.rowinfo[dataIndex].layoutHeight;
-    const toppos = rowinfo.top; //this.state.rowinfo[dataIndex].top;
+    const renderkey = "row-"+dataIndex+"-"+rowinfoIndex;//index로 하면 key가 유지됨
+    const rowHeight = rowinfo.height;
+    const toppos = rowinfo.top;
     const classRow = "";
 
     return (

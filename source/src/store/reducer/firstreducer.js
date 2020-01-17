@@ -3,30 +3,30 @@ let initialState = {
     id:""
 } ;
 
-const firstreducer = (state = { DataTableData: {number:0}, dummy:null}, action) => {
+const firstreducer = (state = { CompInfo: {number:0}, dummy:null}, action) => {
 
     switch(action.type) {
         case INCREMENT:
-            state.DataTableData[action.payload.tableId].number++;
-            state.DataTableData = Object.assign({}, state.DataTableData);
-            state.DataTableData["park"].number  =  state.DataTableData["kim"].number/2;
+            state.CompInfo[action.payload.tableId].number++;
+            state.CompInfo = Object.assign({}, state.CompInfo);
+            state.CompInfo["park"].number  =  state.CompInfo["kim"].number/2;
             return {
                 ...state,
             } ;
         case DECREMENT:
-            state.DataTableData[action.payload.tableId].number--;
-            state.DataTableData = Object.assign({}, state.DataTableData);
-            state.DataTableData["park"].number  =  state.DataTableData["kim"].number/2;
+            state.CompInfo[action.payload.tableId].number--;
+            state.CompInfo = Object.assign({}, state.CompInfo);
+            state.CompInfo["park"].number  =  state.CompInfo["kim"].number/2;
             return {
                 ...state,
             } ;
-        case TESTACTION:
-            if(state.DataTableData[action.payload.tableId]){
+        case SAVEINFO:
+            if(state.CompInfo[action.payload.tableId]){
               return {
                   ...state,
               } ;
             }
-            state.DataTableData[action.payload.tableId] = action.payload.tableData
+            state.CompInfo[action.payload.tableId] = action.payload.tableData
             return {
                 ...state,
             } ;
@@ -40,7 +40,7 @@ export default firstreducer;
 // 액션 타입 정의
 const INCREMENT = 'INCREMENT' ;
 const DECREMENT = 'DECREMENT' ;
-const TESTACTION = 'TESTACTION'
+const SAVEINFO = 'SAVEINFO'
 
 // 액션 생성 함수 정의
 export const increment = (tableSettings) => ({ type: INCREMENT , payload:{
@@ -50,15 +50,15 @@ export const decrement = (tableSettings) => ({ type: DECREMENT , payload:{
     tableId:tableSettings.id ,
 } }) ;
 export const saveinfo =  (tableSettings) =>({
-type: "TESTACTION",
+type: "SAVEINFO",
 payload:{
     tableId:tableSettings.id ,
     tableData: {
-           fetching: true,
-           fetched: false,
-           error: null,
-           data: null,
-           dataTotalSize: null,
+           apple: true,
+           grape: false,
+           banana: 1,
+           orange: "hello",
+           melon: function abc(){console.log("world");},
            number:0,
    },
 }

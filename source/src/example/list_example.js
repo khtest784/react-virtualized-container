@@ -102,6 +102,14 @@ class ListExample extends Component {
           layout-width="600px"
           layout-height="500px"
         ></List>
+        <List
+          id="ListSample2"
+          row-option={rowOption}
+          items={testarr}
+          column-option={columnOption}
+          layout-width="300px"
+          layout-height="300px"
+        ></List>
       </div>
     );
   }

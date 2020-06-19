@@ -14,6 +14,7 @@ class Table extends Component {
       pageStartNum: 0,
       page: 1,
       "pivot-column-index":0,
+      overscan:2,
       ...props
     };
     this.tableData = {
@@ -36,7 +37,7 @@ class Table extends Component {
   }
   __makeEventArray() {
     this.tableData.eventinfo = this.state.items.map((rowitem, rowitemindex) => {
-      return [...Object.values(this.state["row-option"])].map((data, index) => {
+      return [...Object.values(this.state["rowOption"])].map((data, index) => {
         return {
           selected: false,
           checked: false
@@ -45,7 +46,7 @@ class Table extends Component {
     });
 
     this.tableData.headeventinfo = [{}].map((rowitem, rowitemindex) => {
-      return [...Object.values(this.state["row-option"])].map((data, index) => {
+      return [...Object.values(this.state["rowOption"])].map((data, index) => {
         return {
           selected: false,
           checked: false
@@ -113,19 +114,19 @@ class Table extends Component {
   __initProperties() {
     this.tableData.data = this.state.items;
     this.tableData.headColumnOption = [
-      ...Object.values(this.state["head-column-option"])
+      ...Object.values(this.state["headColumnOption"])
     ].map(headrow => {
       return Object.values(headrow);
     }); //Top.Util.namespace(this.state.headColumnOption);
     this.tableData.columnOption = [
-      ...Object.values(this.state["column-option"])
+      ...Object.values(this.state["columnOption"])
     ].map(itemrow => {
       return Object.values(itemrow);
     });
 
-    this.tableData.rowOption = [...Object.values(this.state["row-option"])];
-    this.tableData.headRowOption = [
-      ...Object.values(this.state["head-row-option"])
+    this.tableData.rowOption = [...Object.values(this.state["rowOption"])];
+    this.tableData.headrowOption = [
+      ...Object.values(this.state["headrowOption"])
     ];
     let pivot = this.state["pivot-column-index"]; //영역분할
     //rowinfo생성
@@ -145,7 +146,7 @@ class Table extends Component {
     let toppos = 0;
     this.tableData.headerrowinfo = this.tableData.headerdata.map(
       (headrowitem, headrowitemindex) => {
-        return this.tableData.headRowOption.map((data, index) => {
+        return this.tableData.headrowOption.map((data, index) => {
           let height = parseInt(data.height) ? parseInt(data.height) : 30; //~~index%2?30:30;
           let top = toppos;
           let bottom = top + height;
@@ -333,22 +334,24 @@ class Table extends Component {
 
   render() {
     this.__initProperties(); //init 개념보다는 runtime props 셋팅의 의미가 큽니다
+    const {overscan,pivotColumnIndex,pagepointer,width,height,id,headCellmaker,cellmaker} = this.state;
+
     const tablestyle = {
       overflow: "hidden",
-      width: this.state["layout-width"],
-      height: this.state["layout-height"]
+      width: width,
+      height: height
     };
     //for git
     let fix_width = 0;
-    if(~~this.state["pivot-column-index"]){
+    if(~~pivotColumnIndex){
       fix_width =this.tableData.headercolumninfo2[0][this.tableData.headercolumninfo2[0].length - 1].right + 3;
     }
     const flex_width =
-      this.state["layout-width"] == "100%"
+      width == "100%"
         ? "100%"
-        : parseInt(this.state["layout-width"]) - fix_width;
+        : parseInt(width) - fix_width;
 
-    const head_height = this.tableData.headRowOption.reduce(
+    const head_height = this.tableData.headrowOption.reduce(
       (acc, cur, index) => {
         return acc + parseInt(cur.height);
       },
@@ -356,9 +359,9 @@ class Table extends Component {
     );
 
     const body_height =
-      this.state["layout-height"] == "100%"
+      height == "100%"
         ? "100%"
-        : parseInt(this.state["layout-height"]) - head_height;
+        : parseInt(height) - head_height;
 
     const resizerposition = {
       left: fix_width + "px",
@@ -367,7 +370,7 @@ class Table extends Component {
 
     return (
       <div
-        id={this.state.id}
+        id={id}
         ref={this.setRootRef}
         className="ww-table"
         style={tablestyle}
@@ -392,10 +395,10 @@ class Table extends Component {
                   }}
                 ></Resizerbox>
               </div>
-              {~~this.state["pivot-column-index"]>0 &&
+              {~~pivotColumnIndex>0 &&
               <VirtualBox
                 isHead={true}
-                cellmaker={this.state["head-cellmaker"]}
+                cellmaker={headCellmaker}
                 columninfo={this.tableData.headercolumninfo2}
                 rowinfo={this.tableData.headerrowinfo}
                 event={this.tableData.headeventinfo}
@@ -406,11 +409,12 @@ class Table extends Component {
                 data-inset="true"
                 className="thead tableview-container fixframe"
                 item-drag={false}
+                overscan={overscan}
               ></VirtualBox>
               }
               <VirtualBox
                 isHead={true}
-                cellmaker={this.state["head-cellmaker"]}
+                cellmaker={headCellmaker}
                 columninfo={this.tableData.headercolumninfo3}
                 rowinfo={this.tableData.headerrowinfo}
                 event={this.tableData.headeventinfo}
@@ -424,38 +428,40 @@ class Table extends Component {
                 ref={ref => {
                   this.thead = ref;
                 }}
+                overscan={overscan}
               ></VirtualBox>
             </div>
             <div className="body_wrapper">
-              {~~this.state["pivot-column-index"]>0 &&
+              {~~pivotColumnIndex>0 &&
               <VirtualBox
                 isHead={false}
                 isTable={true}
-                cellmaker={this.state.cellmaker}
+                cellmaker={cellmaker}
                 columninfo={this.tableData.columninfo2}
                 rowinfo={this.tableData.rowinfo}
                 event={this.tableData.eventinfo}
                 viewport-height={body_height}
                 viewport-width={fix_width}
-                data={this.state.pagepointer}
+                data={pagepointer}
                 data-role="tableview"
                 data-inset="true"
                 className="tbody tableview-container fixframe"
                 ref={ref => {
                   this.fixtbody = ref;
                 }}
+                overscan={overscan}
               ></VirtualBox>
               }
               <VirtualBox
                 isHead={false}
                 isTable={true}
-                cellmaker={this.state.cellmaker}
+                cellmaker={cellmaker}
                 columninfo={this.tableData.columninfo3}
                 rowinfo={this.tableData.rowinfo}
                 event={this.tableData.eventinfo}
                 viewport-height={body_height}
                 viewport-width={flex_width}
-                data={this.state.pagepointer}
+                data={pagepointer}
                 data-role="tableview"
                 data-inset="true"
                 className="tbody tableview-container flexframe"
@@ -463,6 +469,7 @@ class Table extends Component {
                   this.tbody = ref;
                 }}
                 scrollsync={this.scrollhandler}
+                overscan={overscan}
               ></VirtualBox>
             </div>
           </div>

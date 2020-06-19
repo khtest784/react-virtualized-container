@@ -334,10 +334,10 @@ class VirtualBox extends Component {
   __datacut() {
     this.rownum = this.calrownum(parseInt(this.props["viewport-height"]));
     this.colnum = this.calcolnum(parseInt(this.props["viewport-width"]));
-    this.from = Math.max(0, this.state.from - 2);
-    this.from2 = Math.max(0, this.state.from2 - 2);
-    this.to = this.state.from + this.rownum + 2;
-    this.to2 = this.state.from2 + this.colnum + 2;
+    this.from = Math.max(0, this.state.from - this.props.overscan - 1);
+    this.from2 = Math.max(0, this.state.from2 - this.props.overscan -1);
+    this.to = this.state.from + this.rownum + this.props.overscan;
+    this.to2 = this.state.from2 + this.colnum + this.props.overscan;
 
     //this.from = Math.max(0, this.state.from);
     //from2는 datacut에 필요하지않음

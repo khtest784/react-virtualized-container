@@ -14,6 +14,7 @@ import Counter from "./testcounter";
 import TableExample from "./example/table_example";
 import ListExample from "./example/list_example";
 import GridExample from "./example/grid_example";
+import ExcelExample from "./example/excel_example";
 import ReduxExample from "./example/redux_example";
 import "./style/defaultstyle.css";
 
@@ -46,6 +47,9 @@ class App extends Component {
                 <Link to={"/Grid"}>Grid</Link>
               </li>
               <li>
+                <Link to={"/Excel"}>Excel</Link>
+              </li>
+              <li>
                 <Link to={"/Counter"}>TEST</Link>
               </li>
             </ul>
@@ -53,6 +57,7 @@ class App extends Component {
             <Route path="/complexTable" component={TableExample} />
             <Route path="/Grid" component={GridExample} />
             <Route path="/Counter" component={ReduxExample} />
+            <Route path="/Excel" component={ExcelExample} />
           </div>
           <GlobalStyle />
         </BrowserRouter>

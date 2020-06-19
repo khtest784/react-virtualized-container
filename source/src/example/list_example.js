@@ -7,17 +7,17 @@ import Textview from "../components/textview"; //component 예시
 import Pagination from "../components/pagination";
 
 const columns = {
-  0: { id: "testcol0", layoutWidth: "100px", src: "레잉아웃id" },
-  1: { id: "testcol1", layoutWidth: "120px" },
-  2: { id: "testcol2", layoutWidth: "140px" },
-  3: { id: "testcol3", layoutWidth: "160px" },
-  4: { id: "testcol4", layoutWidth: "180px" },
-  5: { id: "testcol5", layoutWidth: "120px" },
-  6: { id: "testcol6", layoutWidth: "140px" },
-  7: { id: "testcol7", layoutWidth: "160px" },
-  8: { id: "testcol8", layoutWidth: "180px" },
-  9: { id: "testcol9", layoutWidth: "200px" },
-  10: { id: "testcol10", layoutWidth: "300px" }
+  0: { id: "testcol0", width: "100px", src: "레잉아웃id" },
+  1: { id: "testcol1", width: "120px" },
+  2: { id: "testcol2", width: "140px" },
+  3: { id: "testcol3", width: "160px" },
+  4: { id: "testcol4", width: "180px" },
+  5: { id: "testcol5", width: "120px" },
+  6: { id: "testcol6", width: "140px" },
+  7: { id: "testcol7", width: "160px" },
+  8: { id: "testcol8", width: "180px" },
+  9: { id: "testcol9", width: "200px" },
+  10: { id: "testcol10", width: "300px" }
 };
 
 //for Table
@@ -96,19 +96,19 @@ class ListExample extends Component {
         <h1>Complex Structure LIST ( essential bind)</h1>
         <List
           id="ListSample"
-          row-option={rowOption}
+          rowOption={rowOption}
           items={testarr}
-          column-option={columnOption}
-          layout-width="600px"
-          layout-height="500px"
+          columnOption={columnOption}
+          width="600px"
+          height="500px"
         ></List>
         <List
           id="ListSample2"
-          row-option={rowOption}
+          rowOption={rowOption}
           items={testarr}
-          column-option={columnOption}
-          layout-width="300px"
-          layout-height="300px"
+          columnOption={columnOption}
+          width="300px"
+          height="300px"
         ></List>
       </div>
     );

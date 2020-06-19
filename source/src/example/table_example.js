@@ -92,7 +92,7 @@ const headColumnOption = {
   }
 };
 
-const headRowOption = {
+const headrowOption = {
   0: { height: "30px" },
   1: { height: "40px" },
   2: { height: "50px" }
@@ -190,15 +190,15 @@ class TableExample extends Component {
         <Table
           id="tableSample"
           cellmaker={cellmaker}
-          head-cellmaker={headCellmaker}
-          head-row-option={headRowOption}
-          row-option={rowOption}
+          headCellmaker={headCellmaker}
+          headrowOption={headrowOption}
+          rowOption={rowOption}
           items={testarr}
-          column-option={columnOption}
-          head-column-option={headColumnOption}
-          layout-width="750px"
+          columnOption={columnOption}
+          headColumnOption={headColumnOption}
+          width="750px"
           pivot-column-index="3"
-          layout-height="400px"
+          height="400px"
           page-length="10"
           ref={ref => {
             this.table01 = ref;
@@ -207,14 +207,14 @@ class TableExample extends Component {
         <Table
           id="tableSample2"
           cellmaker={cellmaker}
-          head-cellmaker={headCellmaker}
-          head-row-option={headRowOption}
-          row-option={rowOption}
+          headCellmaker={headCellmaker}
+          headrowOption={headrowOption}
+          rowOption={rowOption}
           items={testarr}
-          column-option={columnOption}
-          head-column-option={headColumnOption}
-          layout-width="800px"
-          layout-height="300px"
+          columnOption={columnOption}
+          headColumnOption={headColumnOption}
+          width="800px"
+          height="300px"
           ref={ref => {
             this.table02 = ref;
           }}

@@ -85,12 +85,13 @@ const Grid = state => {
       columninfo={columninfo}
       rowinfo={rowinfo}
       event={eventinfo}
-      viewport-height={state.height}
-      viewport-width={state.width}
+      viewport-height={height}
+      viewport-width={width}
       data={dummydata}
       data-role="grid"
       data-inset="true"
       cellmaker={state.cellmaker}
+      overscan={state.overscan?state.overscan:2}
       className="tbody grid-container flexframe"
     ></VirtualBox>
   );

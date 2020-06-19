@@ -8,6 +8,7 @@ class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      overscan:2,
       ...props
     };
     this.listData = {
@@ -21,11 +22,11 @@ class List extends Component {
   __initProperties() {
     this.listData.data = this.state.items;
     this.listData.columnOption = [
-      ...Object.values(this.state["column-option"])
+      ...Object.values(this.state["columnOption"])
     ].map(itemrow => {
       return Object.values(itemrow);
     });
-    this.listData.rowOption = [...Object.values(this.state["row-option"])];
+    this.listData.rowOption = [...Object.values(this.state["rowOption"])];
     let colspanCount = 0;
     let toppos = 0;
     let leftpos = 0;
@@ -89,6 +90,7 @@ class List extends Component {
 
   render() {
     this.__initProperties();
+    const {id,overscan,cellmaker,height,width} = this.state;
     const style = {
       border: "1px solid grey",
       display: "inline-block",
@@ -97,15 +99,15 @@ class List extends Component {
 
     let count = 0;
     return (
-      <div id={this.state.id} style={style} className="wtable-head">
+      <div id={id} style={style} className="wtable-head">
         <VirtualBox
-          cellmaker={this.state.cellmaker}
+          cellmaker={cellmaker}
           isTable={false}
           columninfo={this.listData.columninfo}
           rowinfo={this.listData.rowinfo}
           event={this.listData.eventinfo}
-          viewport-height={this.state["layout-height"]}
-          viewport-width={this.state["layout-width"]}
+          viewport-height={height}
+          viewport-width={width}
           data={this.listData.data}
           data-role="listview"
           data-inset="true"
@@ -115,6 +117,7 @@ class List extends Component {
             this.list = ref;
           }}
           sync={this.scrollhandler}
+          overscan={overscan}
         ></VirtualBox>
       </div>
     );

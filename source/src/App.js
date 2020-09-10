@@ -14,7 +14,6 @@ import Counter from "./testcounter";
 import TableExample from "./example/table_example";
 import ListExample from "./example/list_example";
 import GridExample from "./example/grid_example";
-import ExcelExample from "./example/excel_example";
 import ReduxExample from "./example/redux_example";
 import "./style/defaultstyle.css";
 
@@ -44,20 +43,12 @@ class App extends Component {
                 <Link to={"/complexTable"}>Complexed Table</Link>
               </li>
               <li>
-                <Link to={"/Grid"}>Grid</Link>
-              </li>
-              <li>
-                <Link to={"/Excel"}>Excel</Link>
-              </li>
-              <li>
-                <Link to={"/Counter"}>TEST</Link>
+                <Link to={"/Grid"}>Grid(조절가능 UI)</Link>
               </li>
             </ul>
             <Route path="/complexLIst" component={ListExample} />
             <Route path="/complexTable" component={TableExample} />
             <Route path="/Grid" component={GridExample} />
-            <Route path="/Counter" component={ReduxExample} />
-            <Route path="/Excel" component={ExcelExample} />
           </div>
           <GlobalStyle />
         </BrowserRouter>

@@ -85,8 +85,8 @@ const Grid = state => {
       columninfo={columninfo}
       rowinfo={rowinfo}
       event={eventinfo}
-      viewport-height={height}
-      viewport-width={width}
+      viewport-height={state.height}
+      viewport-width={state.width}
       data={dummydata}
       data-role="grid"
       data-inset="true"

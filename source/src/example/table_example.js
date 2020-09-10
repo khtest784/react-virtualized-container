@@ -180,7 +180,7 @@ class TableExample extends Component {
   }
 
   handlePageClick = obj => {
-    this.table01.setState({ page: obj.selected + 1 });
+    this.table02.setState({ page: obj.selected + 1 });
   };
 
   render() {
@@ -199,7 +199,6 @@ class TableExample extends Component {
           width="750px"
           pivot-column-index="3"
           height="400px"
-          page-length="10"
           ref={ref => {
             this.table01 = ref;
           }}
@@ -215,6 +214,7 @@ class TableExample extends Component {
           headColumnOption={headColumnOption}
           width="800px"
           height="300px"
+          page-length="10"
           ref={ref => {
             this.table02 = ref;
           }}
